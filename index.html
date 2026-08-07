@@ -501,7 +501,6 @@
       </div>
       <div class="card-grid" style="margin-top:40px;">
         <div class="info-card reveal"><span class="icon">🏆</span><div><h3>SPURS Scholarship</h3><p>Selected among 25 students across Tamil Nadu.</p></div></div>
-        <div class="info-card reveal"><span class="icon">🏆</span><div><h3>School Topper</h3><p>Government Higher Secondary School.</p></div></div>
         <div class="info-card reveal"><span class="icon">🏆</span><div><h3>Zenith Hackathon</h3><p>Built and presented the Store Lens project.</p></div></div>
         <div class="info-card reveal"><span class="icon">🏆</span><div><h3>Sustainability Hackathon</h3><p>Built and presented the Water Leakage Detection project with US-based sponsors.</p></div></div>
       </div>
@@ -512,8 +511,8 @@
         <div class="rule"></div>
       </div>
       <div class="card-grid" style="margin-top:40px;">
-        <div class="info-card reveal"><span class="icon">🎓</span><div><h3>SSN College of Engineering</h3><p>B.E. Electronics and Communication Engineering</p><p class="meta">CGPA: 8.10</p></div></div>
-        <div class="info-card reveal"><span class="icon">🎓</span><div><h3>Government Higher Secondary School</h3><p>School Topper</p></div></div>
+        <div class="info-card reveal"><span class="icon">🎓</span><div><h3>SSN College of Engineering</h3><p>B.E. Electronics and Communication Engineering</p></div></div>
+        <div class="info-card reveal"><span class="icon">🎓</span><div><h3>Government Higher Secondary School</h3><p>Higher Secondary Education</p></div></div>
       </div>
 
       <div class="reveal">
@@ -536,7 +535,8 @@
         <div class="rule"></div>
       </div>
 
-      <div class="reveal">
+      <div class="contact-grid">
+        <div class="reveal">
           <p style="color:#94a3b8;max-width:380px;">I'm currently looking for Software Development Engineer intern opportunities. Feel free to reach out — I usually reply within a day or two.</p>
           <div class="contact-links">
             <a href="mailto:pmaharajacas7@gmail.com">✉️ pmaharajacas7@gmail.com</a>
@@ -545,6 +545,28 @@
             <a href="https://www.linkedin.com/in/maharaja-p-524a7b322/" target="_blank" rel="noreferrer">🔗 LinkedIn</a>
           </div>
         </div>
+
+        <form id="contactForm" class="reveal" action="https://formsubmit.co/pmaharajacas7@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New message from portfolio site">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none">
+
+          <div>
+            <label for="cf-name">NAME</label>
+            <input id="cf-name" type="text" name="name" required>
+          </div>
+          <div>
+            <label for="cf-email">EMAIL</label>
+            <input id="cf-email" type="email" name="email" required>
+          </div>
+          <div>
+            <label for="cf-message">MESSAGE</label>
+            <textarea id="cf-message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="border:none;cursor:pointer;">Send Message</button>
+          <p id="cf-note" class="form-note">Sends straight to my inbox — no email app needed.</p>
+        </form>
       </div>
     </div>
   </section>
@@ -612,7 +634,39 @@
   }
   typeTerminal();
 
-  // (contact form removed — direct links only)
+  // ---- contact form (submits to inbox via FormSubmit, no page reload) ----
+  const contactForm = document.getElementById('contactForm');
+  const cfNote = document.getElementById('cf-note');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      cfNote.textContent = 'Sending...';
+      cfNote.className = 'form-note';
+      try {
+        const res = await fetch(contactForm.action, {
+          method: 'POST',
+          body: new FormData(contactForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          cfNote.textContent = "Message sent! I'll get back to you soon.";
+          cfNote.className = 'form-note ok';
+          contactForm.reset();
+        } else {
+          throw new Error('Request failed');
+        }
+      } catch (err) {
+        cfNote.textContent = 'Something went wrong — please email me directly instead.';
+        cfNote.className = 'form-note err';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  }
 </script>
 
 </body>
